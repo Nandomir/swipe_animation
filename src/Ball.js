@@ -1,12 +1,24 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, Animated } from 'react-native';
 
 class Ball extends Component {
-  render() {
-    return (
-      <View style={styles.ball} />
-    );
-  }
+
+    componentWillMount() {
+      this.position = new Animated.ValueXY(0, 0);
+      Animated.spring(this.position, {
+        toValue: { x: 200, y: 500 }  // x,y have to be lowercase, else the ball won't move properly
+      }).start();
+    }
+
+    render() {
+      // animated.view is the element being moved on the screen
+
+      return (
+        <Animated.View style={this.position.getLayout()}>   
+          <View style={styles.ball} />
+        </Animated.View>
+      );
+    }
 }
 
 
