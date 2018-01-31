@@ -5,6 +5,7 @@ import {
   Text, 
   View 
 } from 'react-native';
+import { Card, Button } from 'react-native-elements';
 import Deck from './src/Deck'
 
 const DATA = [
@@ -18,10 +19,23 @@ const DATA = [
   { id: 8, text: 'Card #8', uri: 'http://imgs.abduzeedo.com/files/paul0v2/unsplash/unsplash-01.jpg' },
 ];
 
- class App extends React.Component {
+ export default class App extends React.Component {
   renderCard(item) {
     return(
-        <Text>{item.text}</Text>
+        <Card
+          key={item.id}
+          title={item.text}  // title used on the card itself
+          image={{ uri: item.uri }} // {{}} means passing an object
+        >
+          <Text style={{ marginBottom: 10 }}>
+          I can customise the Card further.
+          </Text>
+          <Button
+            icon={{ name: 'code' }}
+            backgroundColor="#03A9F4"
+            title="View Now!"
+          />
+        </Card>
       );
   }
 
