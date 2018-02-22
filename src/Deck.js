@@ -22,20 +22,37 @@ class Deck extends Component {
     this.state = { panResponder, position }; // following the PanResponder docs, even though it's never being called
   }
 
+  getCardStyle() {
+    return {
+      ...this.state.position.getLayout(), //adds a custom property 
+      transform: [{ rotate: '-45deg' }]   // accepts an array of different transforms, rotate - card rotates
+    };
+  }
+
+
   renderCards() {
-    return this.props.data.map(item=> {
+    return this.props.data.map((item, index) => {
+      if (index === 0) {
+        return (
+          <Animated.View
+            key={item.id}
+            style={this.getCardStyle()}
+            {...this.state.panResponder.panHandlers}
+          >
+            {this.props.renderCard(item)}
+          </Animated.View>
+          );
+      }
+
       return this.props.renderCard(item);
     });
   }
 
   render() {
     return (
-      <Animated.View 
-      style={this.state.position.getLayout()}
-      {...this.state.panResponder.panHandlers}
-      >
+      <View>
         {this.renderCards()}
-      </Animated.View>
+      </View>
       // panHandlers has callbacks that intercept presses from the user - ... is spreading the properties over the view. An exampe of connecting panResponder to an element. 
       );
   }
