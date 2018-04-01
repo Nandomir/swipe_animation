@@ -38,11 +38,17 @@ class Deck extends Component {
   forceSwipe(direction) {
     const x = direction === 'right' ? SCREEN_WIDHT : -SCREEN_WIDHT; // Tenary expression = if expression is true, return SCREEN_WIDTH, if not true then return -SCREEN_WIDTH
 
-    Animated.timing(this.state.position, {
+    Animated.timing(this.state.position, { // timing method moves directly to state position
       toValue: { x , y: 0 },
       duration: SWIPE_OUT_DURATION  // needs this value (in miliseconds) on top of position
-    }).start();  // timing method moves directly to state position
+    }).start( () => this.onSwipeComplete(direction));  // callback function being executed right after the animation
   };
+
+  onSwipeComplete(direction) {
+    const { onSwipeLeft, onSwipeRight } = this.props;
+
+    direction == 'right' ? onSwipeRight() : onSwipeLeft();
+  }
 
   resetPosition() {
     Animated.spring(this.state.position, {
@@ -71,7 +77,7 @@ class Deck extends Component {
           <Animated.View
             key={item.id}
             style={this.getCardStyle()}
-            {...this.state.panResponder.panHandlers}
+            {...this.state.panResponder.panHandlers} // panHandlers has callbacks that intercept presses from the user - ... is spreading the properties over the view. An exampe of connecting panResponder to an element.
           >
             {this.props.renderCard(item)}
           </Animated.View>
@@ -86,8 +92,7 @@ class Deck extends Component {
     return (
       <View>
         {this.renderCards()}
-      </View>
-      // panHandlers has callbacks that intercept presses from the user - ... is spreading the properties over the view. An exampe of connecting panResponder to an element. 
+      </View> 
       );
   }
 }
