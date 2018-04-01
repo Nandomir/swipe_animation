@@ -19,11 +19,19 @@ class Deck extends Component {
       onPanResponderMove: (event, gesture) => {
         position.setValue({ x: gesture.dx , y: gesture.dy })
       },  // whenever user drags anything around the screen; 'gesture' argument holds info about the user movements - most important argument
-      onPanResponderRelease: () => {} // user presses the screen and lets the card go
+      onPanResponderRelease: () => { // user presses the screen and lets the card go
+        this.resetPosition(); // calling this reset the position of the card on the screen
+      }
     });
 
     this.state = { panResponder, position }; // following the PanResponder docs, even though it's never being called
   }
+
+  resetPosition() {
+    Animated.spring(this.state.position, {
+      toValue: { x: 0, y:0 },  // softly resets position of the card 
+    }).start();
+  };
 
   getCardStyle() {
     const { position } = this.state;
