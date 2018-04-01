@@ -8,6 +8,7 @@ import {
 
    const SCREEN_WIDHT = Dimensions.get('window').width;
    const SWIPE_THRESHOLD = 0.25 * SCREEN_WIDHT; // adjusted proportionally to the size of the screen
+   const SWIPE_OUT_DURATION = 350;
 
 class Deck extends Component {
   constructor(props) {
@@ -22,9 +23,9 @@ class Deck extends Component {
       },  // whenever user drags anything around the screen; 'gesture' argument holds info about the user movements - most important argument
       onPanResponderRelease: (event, gesture ) => {//user presses the screen and lets thecard go
         if (gesture.dx > SWIPE_THRESHOLD) {  // .dx value is negative when dragging left
-          console.log('Swipe right!')
+          this.forceSwipe('right'); // forcibly animates the cards to the right
         } else if (gesture.dx < -SWIPE_THRESHOLD) {
-          console.log('Swipe left!')
+          this.forceSwipe('left');
         } else {
           this.resetPosition(); // calling this reset the position of the card on the screen
         }
@@ -33,6 +34,15 @@ class Deck extends Component {
 
     this.state = { panResponder, position }; // following the PanResponder docs, even though it's never being called
   }
+
+  forceSwipe(direction) {
+    const x = direction === 'right' ? SCREEN_WIDHT : -SCREEN_WIDHT; // Tenary expression = if expression is true, return SCREEN_WIDTH, if not true then return -SCREEN_WIDTH
+
+    Animated.timing(this.state.position, {
+      toValue: { x , y: 0 },
+      duration: SWIPE_OUT_DURATION  // needs this value (in miliseconds) on top of position
+    }).start();  // timing method moves directly to state position
+  };
 
   resetPosition() {
     Animated.spring(this.state.position, {
