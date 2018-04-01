@@ -7,6 +7,7 @@ import {
    } from 'react-native';
 
    const SCREEN_WIDHT = Dimensions.get('window').width;
+   const SWIPE_THRESHOLD = 0.25 * SCREEN_WIDHT; // adjusted proportionally to the size of the screen
 
 class Deck extends Component {
   constructor(props) {
@@ -19,8 +20,14 @@ class Deck extends Component {
       onPanResponderMove: (event, gesture) => {
         position.setValue({ x: gesture.dx , y: gesture.dy })
       },  // whenever user drags anything around the screen; 'gesture' argument holds info about the user movements - most important argument
-      onPanResponderRelease: () => { // user presses the screen and lets the card go
-        this.resetPosition(); // calling this reset the position of the card on the screen
+      onPanResponderRelease: (event, gesture ) => {//user presses the screen and lets thecard go
+        if (gesture.dx > SWIPE_THRESHOLD) {  // .dx value is negative when dragging left
+          console.log('Swipe right!')
+        } else if (gesture.dx < -SWIPE_THRESHOLD) {
+          console.log('Swipe left!')
+        } else {
+          this.resetPosition(); // calling this reset the position of the card on the screen
+        }
       }
     });
 
