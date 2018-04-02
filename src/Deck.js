@@ -3,7 +3,9 @@ import {
   View, 
   Animated,
   PanResponder,
-  Dimensions
+  Dimensions,
+  LayoutAnimation,
+  UIManager
    } from 'react-native';
 
    const SCREEN_WIDHT = Dimensions.get('window').width;
@@ -40,6 +42,12 @@ class Deck extends Component {
     });
 
     this.state = { panResponder, position, index: 0 }; // following the PanResponder docs, even though it's never being called
+  }
+
+  componentWillUpdate() { // want the LayoutAnimation to be use at any time when app updates
+    UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
+    // compatibility code for andoid
+    LayoutAnimation.spring();
   }
 
   forceSwipe(direction) {
