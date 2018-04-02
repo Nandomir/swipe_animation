@@ -39,6 +39,20 @@ const DATA = [
       );
   }
 
+  renderNoMoreCards() {
+    return (
+        <Card title="No more cards!">
+          <Text style={{ marginBottom: 10 }}>
+            That's it, you've reached the end of the content.
+          </Text>
+          <Button
+            backgroundColor="#03A9F4"
+            title='Dare for more!'
+          />
+        </Card>
+      );
+  }
+
   render() {
     return (
       <View style={styles.container}>
