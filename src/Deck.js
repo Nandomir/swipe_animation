@@ -11,6 +11,13 @@ import {
    const SWIPE_OUT_DURATION = 350;
 
 class Deck extends Component {
+  static defaultProps = {
+    onSwipeRight: () => {}, 
+    onSwipeLeft: () => {}
+    // when this prop is not passed, component will use this function as a default
+    // static methods are alternative to constructors
+  }
+
   constructor(props) {
     super(props);
 
@@ -32,7 +39,7 @@ class Deck extends Component {
       }
     });
 
-    this.state = { panResponder, position }; // following the PanResponder docs, even though it's never being called
+    this.state = { panResponder, position, index: 0 }; // following the PanResponder docs, even though it's never being called
   }
 
   forceSwipe(direction) {
@@ -49,6 +56,8 @@ class Deck extends Component {
     const item = data[this.state.index]; // 
 
     direction == 'right' ? onSwipeRight(item) : onSwipeLeft(item); // detects whenever user has swiped a card
+    this.state.position.setValue({ x: 0, y:0 }); // forcibly/programmatically reset the value of the positon
+    this.setState({ index: this.state.index + 1 }); 
   }
 
   resetPosition() {
@@ -72,8 +81,10 @@ class Deck extends Component {
 
 
   renderCards() {
-    return this.props.data.map((item, index) => {
-      if (index === 0) {
+    return this.props.data.map((item, i) => {
+      if (i < this.state.index) { return null; }
+
+      if (i === this.state.index) {
         return (
           <Animated.View
             key={item.id}
