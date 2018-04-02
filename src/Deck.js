@@ -43,7 +43,7 @@ class Deck extends Component {
   }
 
   forceSwipe(direction) {
-    const x = direction === 'right' ? SCREEN_WIDHT : -SCREEN_WIDHT; // Tenary expression = if expression is true, return SCREEN_WIDTH, if not true then return -SCREEN_WIDTH
+    const x = direction === 'right' ? SCREEN_WIDHT : -SCREEN_WIDHT; // Tenary expression = if expression is true, return SCREEN_WIDHT, if not true then return -SCREEN_WIDHT
 
     Animated.timing(this.state.position, { // timing method moves directly to state position
       toValue: { x , y: 0 },
@@ -92,7 +92,7 @@ class Deck extends Component {
         return (
           <Animated.View
             key={item.id}
-            style={this.getCardStyle()}
+            style={[this.getCardStyle(), styles.cardStyle]} // when passing multiple styles, pass an array
             {...this.state.panResponder.panHandlers} // panHandlers has callbacks that intercept presses from the user - ... is spreading the properties over the view. An exampe of connecting panResponder to an element.
           >
             {this.props.renderCard(item)}
@@ -100,8 +100,12 @@ class Deck extends Component {
           );
       }
 
-      return this.props.renderCard(item);
-    });
+      return (
+        <View key={item.id} style={styles.cardStyle}>
+        {this.props.renderCard(item)}
+        </View>
+        );
+    }).reverse(); // reverses the .map array from line 88
   }
 
   render() {
@@ -110,6 +114,13 @@ class Deck extends Component {
         {this.renderCards()}
       </View> 
       );
+  }
+}
+
+const styles = {
+  cardStyle: {
+    position: 'absolute', // absolute stacks all the cards on the top of application
+    width: SCREEN_WIDHT
   }
 }
 
