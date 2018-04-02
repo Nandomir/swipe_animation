@@ -39,7 +39,7 @@ const DATA = [
       );
   }
 
-  renderNoMoreCards() {
+  renderNoMoreCards() { // when all cards are swiped a button appears
     return (
         <Card title="No more cards!">
           <Text style={{ marginBottom: 10 }}>
@@ -59,6 +59,7 @@ const DATA = [
         <Deck 
           data={DATA}
           renderCard={this.renderCard}
+          renderNoMoreCards={this.renderNoMoreCards}
         />
       </View>
     );
